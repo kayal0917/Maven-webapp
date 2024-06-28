@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.chainsys.mavendemo.dao.StudentDAO;
 import com.chainsys.mavendemo.dao.StudentImpl;
 import com.chainsys.mavendemo.model.Student;
 
@@ -14,7 +16,7 @@ import com.chainsys.mavendemo.model.Student;
 public class MyController {
     
     @Autowired
-    StudentImpl studentimpl;
+    StudentDAO studentimpl;
 
     @RequestMapping("/")
     public String home() {
@@ -22,10 +24,6 @@ public class MyController {
         return "register.jsp";
     }
 
-    /*
-     * @RequestMapping("/save") public String save() {
-     * System.out.println("Success Page"); return "success.jsp"; }
-     */
 
     @GetMapping("/register")
     public String saveUser(@RequestParam("name") String name, @RequestParam("grade") Integer grade) {
@@ -68,5 +66,16 @@ public class MyController {
         
         return "listuser.jsp";
     }
+    @GetMapping("/search")
+    public String search(@RequestParam ("name") String name, Model model)
+    {
+//        Student user = new Student();
+//        
+//        user.setName(name);        
+        List<Student> users = studentimpl.search(name);
+        model.addAttribute("users", users);
+        
+        return "listuser.jsp";
+    } 
 }
 
